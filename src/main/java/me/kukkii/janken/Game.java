@@ -23,8 +23,6 @@ public class Game{
     int botHand = bot.hand();
     if(userHand==botHand){
       System.out.println("ai kode syo!");
-      userHand = user.hand();
-      botHand = bot.hand();
       compare();
       return;
     }
