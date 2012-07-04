@@ -37,14 +37,27 @@ public class JankenPanel extends JPanel implements ActionListener {
     }
     setLayout(new FlowLayout());
     guButton = new JButton(new ImageIcon(guImage));
+    guButton.addActionListener(this);;
     add(guButton);
     chButton = new JButton(new ImageIcon(chImage));
+    chButton.addActionListener(this);;
     add(chButton);
     paButton = new JButton(new ImageIcon(paImage));
+    paButton.addActionListener(this);;
     add(paButton);
   }
 
   public void actionPerformed(ActionEvent ae) {
+    JButton source = (JButton) ae.getSource();
+    if (source == guButton) {
+      System.err.println("gu - rock");
+    }
+    else if (source == chButton) {
+      System.err.println("choki - scissor");
+    }
+    else if (source == paButton) {
+      System.err.println("pa - paper");
+    }
   }
 
   public static void main(String[] args) throws Exception {
