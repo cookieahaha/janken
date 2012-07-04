@@ -6,8 +6,9 @@ public class Game{
   private Bot bot; 
 
   public static void main(String[] args)throws Exception{
+    Game game = new Game();
     while(true){
-      Game game = new Game();
+      System.out.println("jan ken pon!");
       game.compare();
     }
   }
@@ -15,24 +16,23 @@ public class Game{
   public Game()throws Exception{
     user = new User();
     bot = new Bot();
-    System.out.println("jan ken pon!");
-    user.hand();    
-    bot.hand();
   }
 
   public void compare()throws Exception{
-    if(user.hand()==bot.hand()){
+    int userHand = user.hand();
+    int botHand = bot.hand();
+    if(userHand==botHand){
       System.out.println("ai kode syo!");
-      user.hand();
-      bot.hand();
+      userHand = user.hand();
+      botHand = bot.hand();
       compare();
       return;
     }
-    if((user.hand()==0 && bot.hand()==1) || (user.hand()==1 && bot.hand()==2) || (user.hand()==2 && bot.hand()==0)){
+    if((userHand==0 && botHand==1) || (userHand==1 && botHand==2) || (userHand==2 && botHand==0)){
       System.out.println("u won!");
       return;
     }
-    if((user.hand()==0 && bot.hand()==2) || (user.hand()==1 && bot.hand()==0) || (user.hand()==2 && bot.hand()==1)){
+    if((userHand==0 && botHand==2) || (userHand==1 && botHand==0) || (userHand==2 && botHand==1)){
       System.out.println("u lost!");
       return;
     }

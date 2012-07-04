@@ -19,7 +19,7 @@ public class User implements Player{
     catch(InputMismatchException e){
       System.out.println("enter 0=guu 1=choki 2=paa");
       hand();
-      return -1;
+      return hand();
     } 
   }
 }  
