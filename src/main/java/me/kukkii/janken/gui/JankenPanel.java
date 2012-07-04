@@ -8,6 +8,9 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -48,16 +51,24 @@ public class JankenPanel extends JPanel implements ActionListener {
   }
 
   public void actionPerformed(ActionEvent ae) {
+    PrintWriter out = null;
+    try {
+      out = new PrintWriter(new OutputStreamWriter(System.out, "UTF-8"));
+    }
+    catch (UnsupportedEncodingException e) {
+      out = new PrintWriter(new OutputStreamWriter(System.out));
+    }
     JButton source = (JButton) ae.getSource();
     if (source == guButton) {
-      System.err.println("gu - rock");
+      out.println("グゥー : rock");
     }
     else if (source == chButton) {
-      System.err.println("choki - scissor");
+      out.println("チョキ : scissor");
     }
     else if (source == paButton) {
-      System.err.println("pa - paper");
+      out.println("パァー - paper");
     }
+    out.flush();
   }
 
   public static void main(String[] args) throws Exception {
