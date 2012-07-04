@@ -1,11 +1,9 @@
 package me.kukkii.janken;
 
-import java.util.Scanner;
-
 public class Game{
 
-  private int user;
-  private int bot;
+  private User user;
+  private Bot bot; 
 
   public static void main(String[] args)throws Exception{
     while(true){
@@ -15,26 +13,26 @@ public class Game{
   }
 
   public Game()throws Exception{
-    Scanner scan = new Scanner(System.in);
+    user = new User();
+    bot = new Bot();
     System.out.println("jan ken pon!");
-    int user = scan.nextInt();
-    int bot = (int)(Math.random()*3);
+    user.hand();    
+    bot.hand();
   }
 
   public void compare()throws Exception{
-    if(user==bot){
+    if(user.hand()==bot.hand()){
       System.out.println("ai kode syo!");
-      Scanner scan = new Scanner(System.in);    
-      user = scan.nextInt();
-      bot = (int)(Math.random()*3);
+      user.hand();
+      bot.hand();
       compare();
       return;
     }
-    if((user==0 && bot==1) || (user==1 && bot==2) || (user==2 && bot==0)){
+    if((user.hand()==0 && bot.hand()==1) || (user.hand()==1 && bot.hand()==2) || (user.hand()==2 && bot.hand()==0)){
       System.out.println("u won!");
       return;
     }
-    if((user==0 && bot==2) || (user==1 && bot==0) || (user==2 && bot==1)){
+    if((user.hand()==0 && bot.hand()==2) || (user.hand()==1 && bot.hand()==0) || (user.hand()==2 && bot.hand()==1)){
       System.out.println("u lost!");
       return;
     }
