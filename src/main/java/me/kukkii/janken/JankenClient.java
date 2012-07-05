@@ -15,21 +15,23 @@ public class JankenClient{
   public static void main(String[] args){
     try{
       Socket sock = new Socket();
-      sock.connect(new InetSocketAddress(host,port));
+      sock.connect(new InetSocketAddress(host,port));     
       DataOutputStream out = new DataOutputStream(sock.getOutputStream());
-      out.writeInt(1);
       InputStream is = sock.getInputStream();
-      DataInputStream out2 = new DataInputStream(is);
-      int result = out2.readInt();
-      if(result == 0){
-        System.out.println("tie");
+      DataInputStream in = new DataInputStream(is);
+      while(true){
+        out.writeInt(1);   // choki 4testing
+        int result = in.readInt();
+        if(result == 0){
+          System.out.println("tie");
+        }
+        if(result == 1){
+          System.out.println("u win");
+        }
+        if(result == 2){
+          System.out.println("u lose");
+        } 
       }
-      if(result == 1){
-        System.out.println("u win");
-      }
-      if(result == 2){
-        System.out.println("u lose");
-      } 
     }
     catch(Exception e){
     

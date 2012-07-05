@@ -7,7 +7,7 @@ import java.io.OutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException; 
-
+import java.io.EOFException;
 
 public class UserHandler implements Runnable{
   
@@ -18,24 +18,29 @@ public class UserHandler implements Runnable{
   }
 
   public void run(){
-    try{
+   try{
       InputStream is = sock.getInputStream();
       System.out.println("jan ken pon!");
       DataInputStream input = new DataInputStream(is);
-      int userHand = input.readInt();
-      int botHand = (int)(Math.random()*3);
-      int result = 100;
-      if(userHand==botHand){
-        result = 0;
-      }
-      if((userHand==0 && botHand==1) || (userHand==1 && botHand==2) || (userHand==2 && botHand==0)){
-        result = 1;
-      }
-      if((userHand==0 && botHand==2) || (userHand==1 && botHand==0) || (userHand==2 && botHand==1)){
-        result = 2;
-      }
       DataOutputStream os = new DataOutputStream(sock.getOutputStream());
-      os.writeInt(result);
+      while(true){ 
+        int userHand = input.readInt();
+        int botHand = (int)(Math.random()*3);
+        int result = 100;
+        if(userHand==botHand){
+          result = 0;
+        }
+        if((userHand==0 && botHand==1) || (userHand==1 && botHand==2) || (userHand==2 && botHand==0)){
+          result = 1;
+        }
+        if((userHand==0 && botHand==2) || (userHand==1 && botHand==0) || (userHand==2 && botHand==1)){
+          result = 2;
+        }
+        os.writeInt(result);
+      }
+    }
+    catch(EOFException e){
+      System.out.println("user quited");
     }
     catch(Exception e){
       e.printStackTrace();
