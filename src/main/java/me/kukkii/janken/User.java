@@ -5,15 +5,13 @@ import java.util.InputMismatchException;
 
 public class User implements Player{
 
-  int user;
-
   public User(){
   }
 
   public int hand(){
     try{
       Scanner scan = new Scanner(System.in);
-      user = scan.nextInt();
+      int user = scan.nextInt() % 3;
       return user;
     }
     catch(InputMismatchException e){
@@ -21,5 +19,9 @@ public class User implements Player{
       hand();
       return hand();
     } 
+  }
+
+  public Hand hand2() {
+    return Hand.get( hand() );
   }
 }  

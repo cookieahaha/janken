@@ -4,4 +4,6 @@ public interface Player{
 
   public int hand();
 
+  public Hand hand2();
+
 }

@@ -2,6 +2,7 @@
 
 package me.kukkii.janken.gui;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +18,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import me.kukkii.janken.Bot;
+import me.kukkii.janken.Hand;
+import me.kukkii.janken.Judge;
+
 public class JankenPanel extends JPanel implements ActionListener {
 
   private static final String guPng = "images/M-j_gu02.png";
@@ -30,6 +35,9 @@ public class JankenPanel extends JPanel implements ActionListener {
   private JButton guButton = null;
   private JButton chButton = null;
   private JButton paButton = null;
+
+  private Bot bot;
+  private Judge judge;
 
   public JankenPanel() {
     try {
@@ -48,6 +56,9 @@ public class JankenPanel extends JPanel implements ActionListener {
     paButton = new JButton(new ImageIcon(paImage));
     paButton.addActionListener(this);;
     add(paButton);
+
+    bot = new Bot();
+    judge = new Judge();
   }
 
   public void actionPerformed(ActionEvent ae) {
@@ -59,14 +70,32 @@ public class JankenPanel extends JPanel implements ActionListener {
       out = new PrintWriter(new OutputStreamWriter(System.out));
     }
     JButton source = (JButton) ae.getSource();
+    Hand yourHand = null;
     if (source == guButton) {
-      out.println("グゥー : rock");
+      out.println("グゥー :  ✊  : rock");
+      yourHand = Hand.ROCK;
     }
     else if (source == chButton) {
-      out.println("チョキ : scissor");
+      out.println("チョキ :  ✌  : scissor");
+      yourHand = Hand.SCISSOR;
     }
     else if (source == paButton) {
-      out.println("パァー - paper");
+      out.println("パァー :  ✋  : paper");
+      yourHand = Hand.PAPER;
+    }
+    Hand botHand = bot.hand2();
+    int c = judge.compare(yourHand, botHand);
+    if (c > 0) {
+      out.println("勝ち");
+      setBackground(new Color(128,128,255));
+    }
+    else if (c < 0) {
+      out.println("負け");
+      setBackground(new Color(255,128,128));
+    }
+    else {
+      out.println("引き分け");
+      setBackground(new Color(255,255,128));
     }
     out.flush();
   }

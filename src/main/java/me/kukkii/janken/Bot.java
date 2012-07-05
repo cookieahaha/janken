@@ -2,13 +2,15 @@ package me.kukkii.janken;
 
 public class Bot implements Player{
 
-  int bot;
-
   public Bot(){
   }
 
   public int hand(){
-    bot = (int)(Math.random()*3);
+    int bot = (int)(Math.random()*3);
     return bot;
+  }
+
+  public Hand hand2() {
+    return Hand.get( hand() );
   }
 }
