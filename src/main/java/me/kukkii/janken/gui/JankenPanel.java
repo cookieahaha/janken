@@ -17,6 +17,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.synth.SynthLookAndFeel;
 
 import me.kukkii.janken.Bot;
 import me.kukkii.janken.Hand;
@@ -36,6 +40,11 @@ public class JankenPanel extends JPanel implements ActionListener {
   private JButton chButton = null;
   private JButton paButton = null;
 
+  private Color defaultColor = null;
+  private Color winColor = null;
+  private Color loseColor = null;
+  private Color drawColor = null;
+
   private Bot bot;
   private Judge judge;
 
@@ -44,17 +53,31 @@ public class JankenPanel extends JPanel implements ActionListener {
       guImage = ImageIO.read(new File(guPng));
       chImage = ImageIO.read(new File(chPng));
       paImage = ImageIO.read(new File(paPng));
-    } catch (IOException e) {
-    }
+    } catch (IOException e) { }
+
+    defaultColor = new Color(255, 255, 255);
+    winColor = new Color(128, 128, 255);
+    loseColor = new Color(255, 128, 128);
+    drawColor = new Color(255, 255, 128);
+
+    try {
+      // UIManager.setLookAndFeel(new MetalLookAndFeel());
+      UIManager.setLookAndFeel(new SynthLookAndFeel());
+    } catch (UnsupportedLookAndFeelException e) { }
+
+    setBackground(defaultColor);
     setLayout(new FlowLayout());
     guButton = new JButton(new ImageIcon(guImage));
     guButton.addActionListener(this);;
+    guButton.setOpaque(true);
     add(guButton);
     chButton = new JButton(new ImageIcon(chImage));
     chButton.addActionListener(this);;
+    chButton.setOpaque(true);
     add(chButton);
     paButton = new JButton(new ImageIcon(paImage));
     paButton.addActionListener(this);;
+    paButton.setOpaque(true);
     add(paButton);
 
     bot = new Bot();
@@ -85,17 +108,22 @@ public class JankenPanel extends JPanel implements ActionListener {
     }
     Hand botHand = bot.hand2();
     int c = judge.compare(yourHand, botHand);
+
+    guButton.setBackground(defaultColor);
+    chButton.setBackground(defaultColor);
+    paButton.setBackground(defaultColor);
+
     if (c > 0) {
       out.println("勝ち");
-      setBackground(new Color(128,128,255));
+      source.setBackground(winColor);
     }
     else if (c < 0) {
       out.println("負け");
-      setBackground(new Color(255,128,128));
+      source.setBackground(loseColor);
     }
     else {
       out.println("引き分け");
-      setBackground(new Color(255,255,128));
+      source.setBackground(drawColor);
     }
     out.flush();
   }
