@@ -1,3 +1,5 @@
+// $Id$
+
 package me.kukkii.janken;
 
 import java.net.Socket;
@@ -9,15 +11,17 @@ import java.io.DataOutputStream;
 import java.io.IOException; 
 import java.io.EOFException;
 
+import me.kukkii.janken.bot.RandomBot;
+
 public class UserHandler implements Runnable{
   
   private Socket sock;
-  private Bot bot;
+  private Player bot;
   private Judge judge;
 
   public UserHandler(Socket sock){
     this.sock = sock;
-    bot = new Bot();
+    bot = new RandomBot();
     judge = new Judge();
   }
 
