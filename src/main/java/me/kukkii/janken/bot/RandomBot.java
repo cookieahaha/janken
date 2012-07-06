@@ -5,12 +5,11 @@ package me.kukkii.janken.bot;
 public class RandomBot extends AbstractBot {
 
   public RandomBot(){
-    this(0L, null);
+    super();
   }
 
   public RandomBot(long id, String name){
-    this.id = id;
-    this.name = name;
+    super(id, name);
   }
 
   public int hand(){

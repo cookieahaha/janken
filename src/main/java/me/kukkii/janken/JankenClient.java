@@ -13,6 +13,8 @@ public class JankenClient implements Constants {
   
   private DataOutputStream out;
   private DataInputStream in;
+  private long userId;
+  private String userName;
 
   public JankenClient(){
     try{
@@ -21,6 +23,10 @@ public class JankenClient implements Constants {
       String host = prop.getProperty("server.host");
       int port = Integer.parseInt( prop.getProperty("server.port") );
       System.err.println("host=" + host + " port=" + port);
+
+      userId = Long.parseLong( prop.getProperty("user.id") );
+      userName = prop.getProperty("user.name");
+      System.err.println("user id=" + userId + " name=" + userName);
 
       Socket sock = new Socket();
       sock.connect(new InetSocketAddress(host, PORT));     

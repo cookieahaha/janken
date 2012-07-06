@@ -2,20 +2,17 @@
 
 package me.kukkii.janken.bot;
 
+import me.kukkii.janken.AbstractPlayer;
 import me.kukkii.janken.Hand;
-import me.kukkii.janken.Player;
 
-abstract public class AbstractBot implements Player {
+abstract public class AbstractBot extends AbstractPlayer {
 
-  protected long id;
-  protected String name;
-
-  public long getId() {
-    return id;
+  public AbstractBot() {
+    super();
   }
 
-  public String getName() {
-    return name;
+  public AbstractBot(long id, String name) {
+    super(id, name);
   }
 
   abstract public int hand() ;
