@@ -18,6 +18,7 @@ public class UserHandler implements Runnable{
   private Socket sock;
   private Player bot;
   private Judge judge;
+  private User user;
 
   public UserHandler(Socket sock){
     this.sock = sock;
@@ -27,14 +28,27 @@ public class UserHandler implements Runnable{
 
   public void run(){
    try{
-      System.out.println("jan ken pon!");
       DataInputStream in = new DataInputStream(sock.getInputStream());
       DataOutputStream out = new DataOutputStream(sock.getOutputStream());
+      long id = in.readLong();
+      char[] buff = new char[128];
+      int i = 0;
+      while (true) {
+        char c = in.readChar();
+        if (c == '\u0000') {
+          break;
+        }
+        buff[i++] = c;
+      }
+      String name = new String(buff, 0, i);
+      user = new User(id, name);
+
       while(true){ 
         Hand userHand = Hand.get( in.readInt() );
         Hand botHand = bot.hand2();
         Result result = judge.judge(userHand, botHand);
         out.writeInt(result.value());
+        System.out.print("user=" + name + "(" + id + ") ");
         System.out.println("result: " + result + " user's hand: " + userHand);
       }
     }

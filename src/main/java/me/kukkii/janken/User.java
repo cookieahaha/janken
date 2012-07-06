@@ -1,28 +1,29 @@
 package me.kukkii.janken;
 
+import java.io.FileInputStream;
 import java.util.Scanner;
 import java.util.InputMismatchException;
+import java.util.Properties;
 
-public class User implements Player{
-
-  private long id;
-  private String name;
+public class User extends AbstractPlayer{
 
   public User() {
-    this(0L, null);
+    try {
+      Properties prop = new Properties();
+      prop.load(new FileInputStream("conf/janken.properties"));
+      id = Long.parseLong( prop.getProperty("user.id") );
+      name = prop.getProperty("user.name");
+      // System.err.println("user id=" + userId + " name=" + userName);
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+
   }
 
   public User(long id, String name){
     this.id = id;
     this.name = name;
-  }
-
-  public long getId() {
-    return id;
-  }
-
-  public String getName() {
-    return name;
   }
 
   public int hand(){
