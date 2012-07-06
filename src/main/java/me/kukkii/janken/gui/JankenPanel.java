@@ -26,6 +26,7 @@ import me.kukkii.janken.Bot;
 import me.kukkii.janken.Hand;
 import me.kukkii.janken.Judge;
 import me.kukkii.janken.JankenClient;
+import me.kukkii.janken.Result;
 
 public class JankenPanel extends JPanel implements ActionListener {
 
@@ -45,10 +46,11 @@ public class JankenPanel extends JPanel implements ActionListener {
   private Color winColor = null;
   private Color loseColor = null;
   private Color drawColor = null;
+  private Color invalidColor = null;
 
   private Bot bot;
   private Judge judge;
-  private JankenClient jc;
+  private JankenClient client;
 
   public JankenPanel() {
     try {
@@ -61,6 +63,7 @@ public class JankenPanel extends JPanel implements ActionListener {
     winColor = new Color(128, 128, 255);
     loseColor = new Color(255, 128, 128);
     drawColor = new Color(255, 255, 128);
+    invalidColor = new Color(255, 255, 255);
 
     try {
       // UIManager.setLookAndFeel(new MetalLookAndFeel());
@@ -82,9 +85,9 @@ public class JankenPanel extends JPanel implements ActionListener {
     paButton.setOpaque(true);
     add(paButton);
 
-//    bot = new Bot();
-//    judge = new Judge();
-      jc = new JankenClient();
+ // bot = new Bot();
+ // judge = new Judge();
+    client = new JankenClient();
   }
 
   public void actionPerformed(ActionEvent ae) {
@@ -109,26 +112,32 @@ public class JankenPanel extends JPanel implements ActionListener {
       out.println("パァー :  ✋  : paper");
       yourHand = Hand.PAPER;
     }
-//    Hand botHand = bot.hand2();
-//    int c = judge.compare(yourHand, botHand);
-      int result = jc.game(yourHand);
-      int c = (result==2)?-1:result;
+ // Hand botHand = bot.hand2();
+ // int c = judge.compare(yourHand, botHand);
+    Result result = client.game(yourHand);
 
     guButton.setBackground(defaultColor);
     chButton.setBackground(defaultColor);
     paButton.setBackground(defaultColor);
 
-    if (c > 0) {
+    switch (result) {
+    case WIN:
       out.println("勝ち");
       source.setBackground(winColor);
-    }
-    else if (c < 0) {
+      break;
+    case LOSE:
       out.println("負け");
       source.setBackground(loseColor);
-    }
-    else {
+      break;
+    case DRAW:
       out.println("引き分け");
       source.setBackground(drawColor);
+      break;
+    case INVALID:
+    default:
+      out.println("?");
+      source.setBackground(invalidColor);
+      break;
     }
     out.flush();
   }

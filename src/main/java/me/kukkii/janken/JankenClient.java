@@ -7,56 +7,58 @@ import java.io.InputStream;
 import java.io.DataInputStream;
 import java.net.InetSocketAddress;
 
-public class JankenClient{
+public class JankenClient implements Constants {
   
   private static String host ="localhost";
-  private static int port = 50000;
   private DataOutputStream out;
   private DataInputStream in;
 
   public JankenClient(){
     try{
       Socket sock = new Socket();
-      sock.connect(new InetSocketAddress(host,port));     
+      sock.connect(new InetSocketAddress(host,PORT));     
       out = new DataOutputStream(sock.getOutputStream());
       InputStream is = sock.getInputStream();
       in = new DataInputStream(is);
     }
     catch (Exception e){
+      e.printStackTrace();
     }
   }  
 
   public static void main(String[] args){
     JankenClient jc = new JankenClient();
     while(true){
-      int result = jc.game(Hand.ROCK);
+      Result result = jc.game(Hand.ROCK);
       jc.showResult(result);
     }
   }
 
-  public int game(Hand hand){
+  public Result game(Hand hand){
     try{
       out.writeInt(hand.value());   // choki 4testing
       int result = in.readInt();
-      return result;
+      return Result.get(result);
     }
     catch(Exception e){
-      return -1;
+      return Result.INVALID;
     }
   }
 
-  public static void showResult(int result){
-    if(result == -1){
+  public static void showResult(Result result){
+    switch (result) {
+    case INVALID:
       System.err.println("server error");
-    }
-    if(result == 0){
+      break;
+    case DRAW:
       System.out.println("tie");
-    }
-    if(result == 1){
+      break;
+    case WIN:
       System.out.println("u win");
-    }  
-    if(result == 2){
+      break;
+    case LOSE:
       System.out.println("u lose");
+      break;
     } 
   }
 }

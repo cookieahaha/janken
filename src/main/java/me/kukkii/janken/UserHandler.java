@@ -12,31 +12,25 @@ import java.io.EOFException;
 public class UserHandler implements Runnable{
   
   private Socket sock;
+  private Bot bot;
+  private Judge judge;
 
   public UserHandler(Socket sock){
     this.sock = sock;
+    bot = new Bot();
+    judge = new Judge();
   }
 
   public void run(){
    try{
-      InputStream is = sock.getInputStream();
       System.out.println("jan ken pon!");
-      DataInputStream input = new DataInputStream(is);
-      DataOutputStream os = new DataOutputStream(sock.getOutputStream());
+      DataInputStream in = new DataInputStream(sock.getInputStream());
+      DataOutputStream out = new DataOutputStream(sock.getOutputStream());
       while(true){ 
-        int userHand = input.readInt();
-        int botHand = (int)(Math.random()*3);
-        int result = 100;
-        if(userHand==botHand){
-          result = 0;
-        }
-        if((userHand==0 && botHand==1) || (userHand==1 && botHand==2) || (userHand==2 && botHand==0)){
-          result = 1;
-        }
-        if((userHand==0 && botHand==2) || (userHand==1 && botHand==0) || (userHand==2 && botHand==1)){
-          result = 2;
-        }
-        os.writeInt(result);
+        Hand userHand = Hand.get( in.readInt() );
+        Hand botHand = bot.hand2();
+        Result result = judge.judge(userHand, botHand);
+        out.writeInt(result.value());
         System.out.println("result: " + result + " user's hand: " + userHand);
       }
     }

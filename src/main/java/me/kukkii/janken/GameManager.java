@@ -5,10 +5,10 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.io.IOException;
 
-public class GameManager{
+public class GameManager implements Constants {
 
-  int port = 50000; 
-//  int timeout_msec = 10000; // accept() のタイムアウトは10秒にしてみる。
+// private static final int timeout_msec = 10000; // accept() のタイムアウトは10秒にしてみる。
+
   private int amountOfGames;
   private Socket sock;
 
@@ -18,12 +18,11 @@ public class GameManager{
   }
 
   public GameManager(){
-    
   }
 
   public void makeGame() throws Exception{
-    ServerSocket svsock = new ServerSocket(port);
-//    svsock.setSoTimeout(timeout_msec);  // ※必要があるときのみ設定する。
+    ServerSocket svsock = new ServerSocket(PORT);
+ // svsock.setSoTimeout(timeout_msec);  // ※必要があるときのみ設定する。
 
     while(true){
       sock = svsock.accept(); 
@@ -31,12 +30,10 @@ public class GameManager{
       uh.start();
       amountOfGames += 1;
     }
-
   }
 
-
-//  public void killGame(){
-//    sock.close();    
-//  }
+  public void killGame() throws Exception {
+    sock.close();    
+  }
 
 }
