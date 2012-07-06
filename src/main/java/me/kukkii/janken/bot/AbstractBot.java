@@ -7,6 +7,17 @@ import me.kukkii.janken.Player;
 
 abstract public class AbstractBot implements Player {
 
+  protected long id;
+  protected String name;
+
+  public long getId() {
+    return id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
   abstract public int hand() ;
 
   public Hand hand2() {

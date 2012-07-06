@@ -3,23 +3,29 @@ package me.kukkii.janken;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.net.InetSocketAddress;
+import java.util.Properties;
 
 public class JankenClient implements Constants {
   
-  private static String host ="localhost";
   private DataOutputStream out;
   private DataInputStream in;
 
   public JankenClient(){
     try{
+      Properties prop = new Properties();
+      prop.load(new FileInputStream("conf/janken.properties"));
+      String host = prop.getProperty("server.host");
+      int port = Integer.parseInt( prop.getProperty("server.port") );
+      System.err.println("host=" + host + " port=" + port);
+
       Socket sock = new Socket();
-      sock.connect(new InetSocketAddress(host,PORT));     
+      sock.connect(new InetSocketAddress(host, PORT));     
       out = new DataOutputStream(sock.getOutputStream());
-      InputStream is = sock.getInputStream();
-      in = new DataInputStream(is);
+      in  = new DataInputStream(sock.getInputStream());
     }
     catch (Exception e){
       e.printStackTrace();
@@ -36,7 +42,7 @@ public class JankenClient implements Constants {
 
   public Result game(Hand hand){
     try{
-      out.writeInt(hand.value());   // choki 4testing
+      out.writeInt(hand.value());
       int result = in.readInt();
       return Result.get(result);
     }

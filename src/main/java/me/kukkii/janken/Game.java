@@ -1,9 +1,14 @@
+// $Id$
+
 package me.kukkii.janken;
+
+import me.kukkii.janken.bot.RandomBot;
 
 public class Game{
 
-  private User user;
-  private Bot bot; 
+  private Player user;
+  private Player bot; 
+  private Judge judge; 
 
   public static void main(String[] args)throws Exception{
     Game game = new Game();
@@ -15,22 +20,22 @@ public class Game{
 
   public Game()throws Exception{
     user = new User();
-    bot = new Bot();
+    bot = new RandomBot();
+    judge = new Judge();
   }
 
   public void compare()throws Exception{
-    int userHand = user.hand();
-    int botHand = bot.hand();
-    if(userHand==botHand){
+    Hand userHand = user.hand2();
+    Hand botHand = bot.hand2();
+    switch (judge.judge(userHand, botHand)) {
+    case DRAW:
       System.out.println("ai kode syo!");
       compare();
       return;
-    }
-    if((userHand==0 && botHand==1) || (userHand==1 && botHand==2) || (userHand==2 && botHand==0)){
+    case WIN:
       System.out.println("u won!");
       return;
-    }
-    if((userHand==0 && botHand==2) || (userHand==1 && botHand==0) || (userHand==2 && botHand==1)){
+    case LOSE:
       System.out.println("u lost!");
       return;
     }

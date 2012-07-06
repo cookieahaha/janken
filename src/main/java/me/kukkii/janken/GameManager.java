@@ -3,7 +3,9 @@ package me.kukkii.janken;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Properties;
 
 public class GameManager implements Constants {
 
@@ -21,7 +23,12 @@ public class GameManager implements Constants {
   }
 
   public void makeGame() throws Exception{
-    ServerSocket svsock = new ServerSocket(PORT);
+    Properties prop = new Properties();
+    prop.load(new FileInputStream("conf/janken.properties"));
+    int port = Integer.parseInt( prop.getProperty("server.port") );
+    System.err.println("port=" + port);
+
+    ServerSocket svsock = new ServerSocket(port);
  // svsock.setSoTimeout(timeout_msec);  // ※必要があるときのみ設定する。
 
     while(true){

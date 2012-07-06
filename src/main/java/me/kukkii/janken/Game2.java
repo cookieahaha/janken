@@ -25,15 +25,14 @@ public class Game2{
     Hand hand1 = player1.hand2();
     System.out.println("You: " + hand0);
     System.out.println("Bot: " + hand1);
-    int n = judge.compare(hand0, hand1);
-    switch (n) {
-    case 1 :
+    switch (judge.judge(hand0, hand1)) {
+    case WIN :
       System.out.println("You Won!");
       break;
-    case -1 :
+    case LOSE :
       System.out.println("You Lost!");
       break;
-    case 0 :
+    case DRAW :
       System.out.println("Draw!!");
       break;
     }
