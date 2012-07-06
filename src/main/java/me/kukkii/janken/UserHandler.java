@@ -37,6 +37,7 @@ public class UserHandler implements Runnable{
           result = 2;
         }
         os.writeInt(result);
+        System.out.println("result: " + result + " user's hand: " + userHand);
       }
     }
     catch(EOFException e){

@@ -25,6 +25,7 @@ import javax.swing.plaf.synth.SynthLookAndFeel;
 import me.kukkii.janken.Bot;
 import me.kukkii.janken.Hand;
 import me.kukkii.janken.Judge;
+import me.kukkii.janken.JankenClient;
 
 public class JankenPanel extends JPanel implements ActionListener {
 
@@ -47,6 +48,7 @@ public class JankenPanel extends JPanel implements ActionListener {
 
   private Bot bot;
   private Judge judge;
+  private JankenClient jc;
 
   public JankenPanel() {
     try {
@@ -80,8 +82,9 @@ public class JankenPanel extends JPanel implements ActionListener {
     paButton.setOpaque(true);
     add(paButton);
 
-    bot = new Bot();
-    judge = new Judge();
+//    bot = new Bot();
+//    judge = new Judge();
+      jc = new JankenClient();
   }
 
   public void actionPerformed(ActionEvent ae) {
@@ -106,8 +109,10 @@ public class JankenPanel extends JPanel implements ActionListener {
       out.println("パァー :  ✋  : paper");
       yourHand = Hand.PAPER;
     }
-    Hand botHand = bot.hand2();
-    int c = judge.compare(yourHand, botHand);
+//    Hand botHand = bot.hand2();
+//    int c = judge.compare(yourHand, botHand);
+      int result = jc.game(yourHand);
+      int c = (result==2)?-1:result;
 
     guButton.setBackground(defaultColor);
     chButton.setBackground(defaultColor);
