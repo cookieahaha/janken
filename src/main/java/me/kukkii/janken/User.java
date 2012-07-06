@@ -5,7 +5,24 @@ import java.util.InputMismatchException;
 
 public class User implements Player{
 
-  public User(){
+  private long id;
+  private String name;
+
+  public User() {
+    this(0L, null);
+  }
+
+  public User(long id, String name){
+    this.id = id;
+    this.name = name;
+  }
+
+  public long getId() {
+    return id;
+  }
+
+  public String getName() {
+    return name;
   }
 
   public int hand(){
