@@ -12,4 +12,8 @@ public interface Player{
 
   public Hand hand2();
 
+  public int hand(int other);
+
+  public Hand hand2(Hand other);
+
 }

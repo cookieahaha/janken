@@ -25,6 +25,7 @@ public class BotManager {
     bots.add(new Rock100Bot());
     bots.add(new Scissor100Bot());
     bots.add(new Paper100Bot());
+    bots.add(new God());
   }
 
   public Player next() {

@@ -36,4 +36,10 @@ abstract public class AbstractPlayer implements Player {
     return Hand.get( hand() );
   }
 
+  abstract public int hand(int other) ;
+
+  public Hand hand2(Hand other) {
+    return Hand.get( hand(other.value()) );
+  }
+
 }

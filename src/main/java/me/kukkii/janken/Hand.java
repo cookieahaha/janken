@@ -6,7 +6,8 @@ public enum Hand {
 
   ROCK (0),
   SCISSOR (1),
-  PAPER (2);
+  PAPER (2),
+  UNKNOWN (-1);
 
   private int value;
 
@@ -25,8 +26,9 @@ public enum Hand {
     case 1 :
       return SCISSOR;
     case 2 :
-    default :
       return PAPER;
+    default :
+      return UNKNOWN;
     }
   }
 }

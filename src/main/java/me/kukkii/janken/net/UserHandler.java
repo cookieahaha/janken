@@ -44,7 +44,7 @@ public class UserHandler implements Runnable{
         NetUtils.sendString(out, bot.getName());
 
         Hand userHand = Hand.get( in.readInt() );
-        Hand botHand = bot.hand2();
+        Hand botHand = bot.hand2(userHand);
         out.writeInt(botHand.value());
         Result result = judge.judge(userHand, botHand);
         out.writeInt(result.value());
