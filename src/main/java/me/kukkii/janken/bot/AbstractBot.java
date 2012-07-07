@@ -17,8 +17,4 @@ abstract public class AbstractBot extends AbstractPlayer {
 
   abstract public int hand() ;
 
-  public Hand hand2() {
-    return Hand.get( hand() );
-  }
-
 }

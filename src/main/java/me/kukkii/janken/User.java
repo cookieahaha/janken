@@ -1,3 +1,5 @@
+// $Id$
+
 package me.kukkii.janken;
 
 import java.io.FileInputStream;
@@ -22,8 +24,7 @@ public class User extends AbstractPlayer{
   }
 
   public User(long id, String name){
-    this.id = id;
-    this.name = name;
+    super(id, name);
   }
 
   public int hand(){
@@ -39,7 +40,4 @@ public class User extends AbstractPlayer{
     } 
   }
 
-  public Hand hand2() {
-    return Hand.get( hand() );
-  }
 }  
