@@ -44,12 +44,6 @@ public class JankenPanel extends JPanel implements ActionListener {
   private JButton chButton = null;
   private JButton paButton = null;
 
-  private Color defaultColor = null;
-  private Color winColor = null;
-  private Color loseColor = null;
-  private Color drawColor = null;
-  private Color invalidColor = null;
-
   private Player bot;
   private Judge judge;
   private JankenClient client;
@@ -61,18 +55,7 @@ public class JankenPanel extends JPanel implements ActionListener {
       paImage = ImageIO.read(new File(paPng));
     } catch (IOException e) { }
 
-    defaultColor = new Color(255, 255, 255);
-    winColor = new Color(128, 128, 255);
-    loseColor = new Color(255, 128, 128);
-    drawColor = new Color(255, 255, 128);
-    invalidColor = new Color(255, 255, 255);
-
-    try {
-      // UIManager.setLookAndFeel(new MetalLookAndFeel());
-      UIManager.setLookAndFeel(new SynthLookAndFeel());
-    } catch (UnsupportedLookAndFeelException e) { }
-
-    setBackground(defaultColor);
+    setBackground(ColorManager.getManager().getDefaultColor());
     setLayout(new FlowLayout());
     guButton = new JButton(new ImageIcon(guImage));
     guButton.addActionListener(this);;
@@ -132,25 +115,12 @@ public class JankenPanel extends JPanel implements ActionListener {
 
     out.println("you=" + yourHand + " bot=" + botHand + " result=" + result);
 
+    Color defaultColor = ColorManager.getManager().getDefaultColor();
     guButton.setBackground(defaultColor);
     chButton.setBackground(defaultColor);
     paButton.setBackground(defaultColor);
 
-    switch (result) {
-    case WIN:
-      source.setBackground(winColor);
-      break;
-    case LOSE:
-      source.setBackground(loseColor);
-      break;
-    case DRAW:
-      source.setBackground(drawColor);
-      break;
-    case INVALID:
-    default:
-      source.setBackground(invalidColor);
-      break;
-    }
+    source.setBackground(ColorManager.getManager().getColor(result));
 
     try {
       String botName = client.receiveBotName();
@@ -160,6 +130,11 @@ public class JankenPanel extends JPanel implements ActionListener {
   }
 
   public static void main(String[] args) throws Exception {
+    try {
+      // UIManager.setLookAndFeel(new MetalLookAndFeel());
+      UIManager.setLookAndFeel(new SynthLookAndFeel());
+    } catch (UnsupportedLookAndFeelException e) { }
+
     JFrame frame = new JFrame("janken");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.getContentPane().add(new JankenPanel());
