@@ -1,0 +1,54 @@
+// $Id$
+
+package me.kukkii.janken.log;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import me.kukkii.janken.Hand;
+import me.kukkii.janken.Player;
+import me.kukkii.janken.Result;
+
+public class LogItem implements Serializable {
+
+  private Date timestamp;
+  private Player user;
+  private Player bot;
+  private Hand userHand;
+  private Hand botHand;
+  private Result result;
+
+  public LogItem(Date timestamp, Player user, Player bot, Hand userHand, Hand botHand, Result result) {
+    this.timestamp = timestamp;
+    this.user = user;
+    this.bot = bot;
+    this.userHand = userHand;
+    this.botHand = botHand;
+    this.result = result;
+  }
+
+  public Date getTimestamp() {
+    return timestamp;
+  }
+
+  public Player getUser() {
+    return user;
+  }
+
+  public Player getBot() {
+    return bot;
+  }
+
+  public Hand getUserHand() {
+    return userHand;
+  }
+
+  public Hand getBotHand() {
+    return botHand;
+  }
+
+  public Result getResult() {
+    return result;
+  }
+
+}
