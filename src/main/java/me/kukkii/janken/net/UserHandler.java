@@ -35,17 +35,9 @@ public class UserHandler implements Runnable{
    try{
       DataInputStream in = new DataInputStream(sock.getInputStream());
       DataOutputStream out = new DataOutputStream(sock.getOutputStream());
+
       long id = in.readLong();
-      char[] buff = new char[128];
-      int i = 0;
-      while (true) {
-        char c = in.readChar();
-        if (c == '\u0000') {
-          break;
-        }
-        buff[i++] = c;
-      }
-      String name = new String(buff, 0, i);
+      String name = NetUtils.receiveString(in);
       user = new User(id, name);
 
       while(true){ 

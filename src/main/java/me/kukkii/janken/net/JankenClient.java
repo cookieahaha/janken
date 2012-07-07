@@ -37,10 +37,7 @@ public class JankenClient implements Constants {
 
       user = new User();
       out.writeLong( user.getId() );
-      for (char c : user.getName().toCharArray()) {
-        out.writeChar(c);
-      }
-      out.writeChar('\u0000');
+      NetUtils.sendString(out, user.getName());
     }
     catch (Exception e){
       e.printStackTrace();
