@@ -40,4 +40,8 @@ public class User extends AbstractPlayer{
     } 
   }
 
+  public int hand(int other){
+    return hand();
+  }
+
 }  
