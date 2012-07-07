@@ -6,15 +6,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -24,12 +18,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.synth.SynthLookAndFeel;
 
-import me.kukkii.janken.Constants;
 import me.kukkii.janken.Hand;
-import me.kukkii.janken.Judge;
-import me.kukkii.janken.Player;
 import me.kukkii.janken.Result;
-import me.kukkii.janken.bot.RandomBot;
 import me.kukkii.janken.net.JankenClient;
 
 public class JankenGamePanel extends JPanel implements ActionListener {
@@ -44,12 +34,15 @@ public class JankenGamePanel extends JPanel implements ActionListener {
 
   public JankenGamePanel() {
     setBackground(ColorManager.getManager().getDefaultColor());
+    setOpaque(true);
     setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     
     yourNameLabel = new JLabel();
     Font font = yourNameLabel.getFont();
     font = new Font(font.getFamily(), Font.BOLD, 20);
     yourNameLabel.setFont(font);
+    yourNameLabel.setBackground(ColorManager.getManager().getDefaultColor());
+    yourNameLabel.setOpaque(true);
     add(yourNameLabel);
 
     yourJankenPanel = new JankenPanel(this);
@@ -58,9 +51,11 @@ public class JankenGamePanel extends JPanel implements ActionListener {
 
     botNameLabel = new JLabel();
     botNameLabel.setFont(font);
+    botNameLabel.setBackground(ColorManager.getManager().getDefaultColor());
+    botNameLabel.setOpaque(true);
     add(botNameLabel);
 
-    botJankenPanel = new JankenPanel(this);
+    botJankenPanel = new JankenPanel(null);
     botJankenPanel.clearColors();
     add(botJankenPanel);
 
