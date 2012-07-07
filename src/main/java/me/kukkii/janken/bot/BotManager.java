@@ -21,10 +21,11 @@ public class BotManager {
 
   private BotManager(){
     bots = new ArrayList<Player>();
-    bots.add(new RandomBot());
     bots.add(new Rock100Bot());
     bots.add(new Scissor100Bot());
     bots.add(new Paper100Bot());
+    bots.add(new RotationBot());
+    bots.add(new RandomBot());
     bots.add(new God());
   }
 
