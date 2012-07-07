@@ -11,7 +11,9 @@ abstract public class AbstractPlayer implements Player {
   protected String name;
 
   public AbstractPlayer() {
-    name = getClass().getName();
+    String s = getClass().getName();
+    int n = s.lastIndexOf(".");
+    name = s.substring(n+1);
     id = name.hashCode();
   }
 
