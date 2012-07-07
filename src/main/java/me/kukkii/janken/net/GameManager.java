@@ -1,4 +1,6 @@
-package me.kukkii.janken;
+// $Id$
+
+package me.kukkii.janken.net;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -7,9 +9,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import me.kukkii.janken.Constants;
+
 public class GameManager implements Constants {
 
-// private static final int timeout_msec = 10000; // accept() のタイムアウトは10秒にしてみる。
+  private static final int timeout_msec = -1;
 
   private int amountOfGames;
   private Socket sock;
@@ -29,7 +33,9 @@ public class GameManager implements Constants {
     System.err.println("port=" + port);
 
     ServerSocket svsock = new ServerSocket(port);
- // svsock.setSoTimeout(timeout_msec);  // ※必要があるときのみ設定する。
+    if (timeout_msec > 0) {
+      svsock.setSoTimeout(timeout_msec);
+    }
 
     while(true){
       sock = svsock.accept(); 

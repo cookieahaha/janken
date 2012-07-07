@@ -22,11 +22,13 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.synth.SynthLookAndFeel;
 
-import me.kukkii.janken.Bot;
+import me.kukkii.janken.Constants;
 import me.kukkii.janken.Hand;
 import me.kukkii.janken.Judge;
-import me.kukkii.janken.JankenClient;
+import me.kukkii.janken.Player;
 import me.kukkii.janken.Result;
+import me.kukkii.janken.bot.RandomBot;
+import me.kukkii.janken.net.JankenClient;
 
 public class JankenPanel extends JPanel implements ActionListener {
 
@@ -48,7 +50,7 @@ public class JankenPanel extends JPanel implements ActionListener {
   private Color drawColor = null;
   private Color invalidColor = null;
 
-  private Bot bot;
+  private Player bot;
   private Judge judge;
   private JankenClient client;
 
@@ -85,7 +87,7 @@ public class JankenPanel extends JPanel implements ActionListener {
     paButton.setOpaque(true);
     add(paButton);
 
- // bot = new Bot();
+ // bot = new RandomBot();
  // judge = new Judge();
     client = new JankenClient();
   }

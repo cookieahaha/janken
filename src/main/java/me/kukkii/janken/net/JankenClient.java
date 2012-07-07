@@ -1,4 +1,6 @@
-package me.kukkii.janken;
+// $Id$
+
+package me.kukkii.janken.net;
 
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -8,6 +10,11 @@ import java.io.InputStream;
 import java.io.DataInputStream;
 import java.net.InetSocketAddress;
 import java.util.Properties;
+
+import me.kukkii.janken.Constants;
+import me.kukkii.janken.Hand;
+import me.kukkii.janken.Result;
+import me.kukkii.janken.User;
 
 public class JankenClient implements Constants {
   
@@ -24,7 +31,7 @@ public class JankenClient implements Constants {
       System.err.println("host=" + host + " port=" + port);
 
       Socket sock = new Socket();
-      sock.connect(new InetSocketAddress(host, PORT));     
+      sock.connect(new InetSocketAddress(host, port));     
       out = new DataOutputStream(sock.getOutputStream());
       in  = new DataInputStream(sock.getInputStream());
 

@@ -1,6 +1,6 @@
 // $Id$
 
-package me.kukkii.janken;
+package me.kukkii.janken.net;
 
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -11,6 +11,11 @@ import java.io.DataOutputStream;
 import java.io.IOException; 
 import java.io.EOFException;
 
+import me.kukkii.janken.Hand;
+import me.kukkii.janken.Judge;
+import me.kukkii.janken.Player;
+import me.kukkii.janken.Result;
+import me.kukkii.janken.User;
 import me.kukkii.janken.bot.RandomBot;
 
 public class UserHandler implements Runnable{

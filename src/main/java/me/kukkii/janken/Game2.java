@@ -1,4 +1,8 @@
+// $Id$
+
 package me.kukkii.janken;
+
+import me.kukkii.janken.bot.RandomBot;
 
 public class Game2{
 
@@ -7,7 +11,7 @@ public class Game2{
   private Judge judge;
 
   public static void main(String[] args)throws Exception{
-    Game2 game = new Game2(new User(), new Bot());
+    Game2 game = new Game2(new User(), new RandomBot());
     while(true){
       System.out.println("Jan Ken Pon!");
       game.play();
