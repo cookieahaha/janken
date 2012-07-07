@@ -16,18 +16,17 @@ import me.kukkii.janken.Judge;
 import me.kukkii.janken.Player;
 import me.kukkii.janken.Result;
 import me.kukkii.janken.User;
+import me.kukkii.janken.bot.BotManager;
 import me.kukkii.janken.bot.RandomBot;
 
 public class UserHandler implements Runnable{
   
   private Socket sock;
-  private Player bot;
   private Judge judge;
   private User user;
 
   public UserHandler(Socket sock){
     this.sock = sock;
-    bot = new RandomBot();
     judge = new Judge();
   }
 
@@ -41,12 +40,17 @@ public class UserHandler implements Runnable{
       user = new User(id, name);
 
       while(true){ 
+        Player bot = BotManager.getManager().next();
+        NetUtils.sendString(out, bot.getName());
+
         Hand userHand = Hand.get( in.readInt() );
         Hand botHand = bot.hand2();
+        out.writeInt(botHand.value());
         Result result = judge.judge(userHand, botHand);
         out.writeInt(result.value());
-        System.out.print("user=" + name + "(" + id + ") ");
-        System.out.println("result: " + result + " user's hand: " + userHand);
+
+        System.out.print("user=" + name + "(" + id + ") bot=" + bot.getName());
+        System.out.println(" result: " + result + " user: " + userHand + " bot: " + botHand);
       }
     }
     catch(EOFException e){

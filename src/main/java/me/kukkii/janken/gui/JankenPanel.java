@@ -87,12 +87,17 @@ public class JankenPanel extends JPanel implements ActionListener {
     paButton.setOpaque(true);
     add(paButton);
 
- // bot = new RandomBot();
- // judge = new Judge();
-    client = new JankenClient();
+    try {
+      client = new JankenClient();
+
+      PrintWriter out = getWriter();
+      String botName = client.receiveBotName();
+      out.println("bot=" + botName);
+      out.flush();
+    } catch (IOException e) { }
   }
 
-  public void actionPerformed(ActionEvent ae) {
+  private PrintWriter getWriter() {
     PrintWriter out = null;
     try {
       out = new PrintWriter(new OutputStreamWriter(System.out, "UTF-8"));
@@ -100,23 +105,32 @@ public class JankenPanel extends JPanel implements ActionListener {
     catch (UnsupportedEncodingException e) {
       out = new PrintWriter(new OutputStreamWriter(System.out));
     }
+    return out;
+  }
+
+  public void actionPerformed(ActionEvent ae) {
+    PrintWriter out = getWriter();
     JButton source = (JButton) ae.getSource();
     Hand yourHand = null;
     if (source == guButton) {
-      out.println("グゥー :  ✊  : rock");
       yourHand = Hand.ROCK;
     }
     else if (source == chButton) {
-      out.println("チョキ :  ✌  : scissor");
       yourHand = Hand.SCISSOR;
     }
     else if (source == paButton) {
-      out.println("パァー :  ✋  : paper");
       yourHand = Hand.PAPER;
     }
- // Hand botHand = bot.hand2();
- // int c = judge.compare(yourHand, botHand);
-    Result result = client.game(yourHand);
+
+    Hand botHand = null;
+    Result result = null;
+    try {
+      client.sendHand(yourHand);
+      botHand = client.receiveBotHand();
+      result = client.receiveResult();
+    } catch (IOException e) { }
+
+    out.println("you=" + yourHand + " bot=" + botHand + " result=" + result);
 
     guButton.setBackground(defaultColor);
     chButton.setBackground(defaultColor);
@@ -124,24 +138,25 @@ public class JankenPanel extends JPanel implements ActionListener {
 
     switch (result) {
     case WIN:
-      out.println("勝ち");
       source.setBackground(winColor);
       break;
     case LOSE:
-      out.println("負け");
       source.setBackground(loseColor);
       break;
     case DRAW:
-      out.println("引き分け");
       source.setBackground(drawColor);
       break;
     case INVALID:
     default:
-      out.println("?");
       source.setBackground(invalidColor);
       break;
     }
-    out.flush();
+
+    try {
+      String botName = client.receiveBotName();
+      out.println("bot=" + botName);
+      out.flush();
+    } catch (IOException e) { }
   }
 
   public static void main(String[] args) throws Exception {

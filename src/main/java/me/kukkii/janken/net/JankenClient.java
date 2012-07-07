@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.net.InetSocketAddress;
@@ -22,44 +23,51 @@ public class JankenClient implements Constants {
   private DataInputStream in;
   private User user;
 
-  public JankenClient(){
-    try{
-      Properties prop = new Properties();
-      prop.load(new FileInputStream("conf/janken.properties"));
-      String host = prop.getProperty("server.host");
-      int port = Integer.parseInt( prop.getProperty("server.port") );
-      System.err.println("host=" + host + " port=" + port);
+  public JankenClient() throws IOException {
+    Properties prop = new Properties();
+    prop.load(new FileInputStream("conf/janken.properties"));
+    String host = prop.getProperty("server.host");
+    int port = Integer.parseInt( prop.getProperty("server.port") );
+    System.err.println("host=" + host + " port=" + port);
 
-      Socket sock = new Socket();
-      sock.connect(new InetSocketAddress(host, port));     
-      out = new DataOutputStream(sock.getOutputStream());
-      in  = new DataInputStream(sock.getInputStream());
+    Socket sock = new Socket();
+    sock.connect(new InetSocketAddress(host, port));     
+    out = new DataOutputStream(sock.getOutputStream());
+    in  = new DataInputStream(sock.getInputStream());
 
-      user = new User();
-      out.writeLong( user.getId() );
-      NetUtils.sendString(out, user.getName());
-    }
-    catch (Exception e){
-      e.printStackTrace();
-    }
+    user = new User();
+    out.writeLong( user.getId() );
+    NetUtils.sendString(out, user.getName());
   }  
 
-  public static void main(String[] args){
-    JankenClient jc = new JankenClient();
-    while(true){
-      Result result = jc.game(Hand.ROCK);
-      jc.showResult(result);
-    }
+  public String receiveBotName() throws IOException {
+    return NetUtils.receiveString(in);
   }
 
-  public Result game(Hand hand){
-    try{
-      out.writeInt(hand.value());
-      int result = in.readInt();
-      return Result.get(result);
-    }
-    catch(Exception e){
-      return Result.INVALID;
+  public void sendHand(Hand hand) throws IOException {
+    out.writeInt(hand.value());
+  }
+
+  public Hand receiveBotHand() throws IOException {
+    int hand = in.readInt();
+    return Hand.get(hand);
+  }
+
+  public Result receiveResult() throws IOException {
+    int result = in.readInt();
+    return Result.get(result);
+  }
+
+  //
+
+  public static void main(String[] args) throws Exception {
+    JankenClient jc = new JankenClient();
+    while(true){
+      jc.receiveBotName();
+      jc.sendHand(Hand.ROCK);
+      jc.receiveBotHand();
+      Result result = jc.receiveResult();
+      showResult(result);
     }
   }
 
