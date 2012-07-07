@@ -40,6 +40,10 @@ public class JankenClient implements Constants {
     NetUtils.sendString(out, user.getName());
   }  
 
+  public User getUser() {
+    return user;
+  }
+
   public String receiveBotName() throws IOException {
     return NetUtils.receiveString(in);
   }

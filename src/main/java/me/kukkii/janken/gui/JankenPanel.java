@@ -30,7 +30,7 @@ import me.kukkii.janken.Result;
 import me.kukkii.janken.bot.RandomBot;
 import me.kukkii.janken.net.JankenClient;
 
-public class JankenPanel extends JPanel implements ActionListener {
+public class JankenPanel extends JPanel {
 
   private static final String guPng = "images/M-j_gu02.png";
   private static final String chPng = "images/M-j_ch02.png";
@@ -44,11 +44,7 @@ public class JankenPanel extends JPanel implements ActionListener {
   private JButton chButton = null;
   private JButton paButton = null;
 
-  private Player bot;
-  private Judge judge;
-  private JankenClient client;
-
-  public JankenPanel() {
+  public JankenPanel(ActionListener listener) {
     try {
       guImage = ImageIO.read(new File(guPng));
       chImage = ImageIO.read(new File(chPng));
@@ -58,26 +54,17 @@ public class JankenPanel extends JPanel implements ActionListener {
     setBackground(ColorManager.getManager().getDefaultColor());
     setLayout(new FlowLayout());
     guButton = new JButton(new ImageIcon(guImage));
-    guButton.addActionListener(this);;
+    guButton.addActionListener(listener);;
     guButton.setOpaque(true);
     add(guButton);
     chButton = new JButton(new ImageIcon(chImage));
-    chButton.addActionListener(this);;
+    chButton.addActionListener(listener);;
     chButton.setOpaque(true);
     add(chButton);
     paButton = new JButton(new ImageIcon(paImage));
-    paButton.addActionListener(this);;
+    paButton.addActionListener(listener);;
     paButton.setOpaque(true);
     add(paButton);
-
-    try {
-      client = new JankenClient();
-
-      PrintWriter out = getWriter();
-      String botName = client.receiveBotName();
-      out.println("bot=" + botName);
-      out.flush();
-    } catch (IOException e) { }
   }
 
   private PrintWriter getWriter() {
@@ -91,9 +78,7 @@ public class JankenPanel extends JPanel implements ActionListener {
     return out;
   }
 
-  public void actionPerformed(ActionEvent ae) {
-    PrintWriter out = getWriter();
-    JButton source = (JButton) ae.getSource();
+  public Hand getHand(JButton source) {
     Hand yourHand = null;
     if (source == guButton) {
       yourHand = Hand.ROCK;
@@ -104,41 +89,34 @@ public class JankenPanel extends JPanel implements ActionListener {
     else if (source == paButton) {
       yourHand = Hand.PAPER;
     }
+    return yourHand;
+  }
 
-    Hand botHand = null;
-    Result result = null;
-    try {
-      client.sendHand(yourHand);
-      botHand = client.receiveBotHand();
-      result = client.receiveResult();
-    } catch (IOException e) { }
-
-    out.println("you=" + yourHand + " bot=" + botHand + " result=" + result);
-
+  public void clearColors() {
     Color defaultColor = ColorManager.getManager().getDefaultColor();
     guButton.setBackground(defaultColor);
     chButton.setBackground(defaultColor);
     paButton.setBackground(defaultColor);
-
-    source.setBackground(ColorManager.getManager().getColor(result));
-
-    try {
-      String botName = client.receiveBotName();
-      out.println("bot=" + botName);
-      out.flush();
-    } catch (IOException e) { }
   }
 
-  public static void main(String[] args) throws Exception {
-    try {
-      // UIManager.setLookAndFeel(new MetalLookAndFeel());
-      UIManager.setLookAndFeel(new SynthLookAndFeel());
-    } catch (UnsupportedLookAndFeelException e) { }
-
-    JFrame frame = new JFrame("janken");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.getContentPane().add(new JankenPanel());
-    frame.pack();
-    frame.setVisible(true);
+  public void setResultColor(JButton button, Result result) {
+    button.setBackground(ColorManager.getManager().getColor(result));
   }
+
+  public void setResultColor(Hand hand, Result result) {
+    JButton button = null;
+    switch (hand) {
+    case ROCK:
+      button = guButton;
+      break;
+    case SCISSOR:
+      button = chButton;
+      break;
+    case PAPER:
+      button = paButton;
+      break;
+    }
+    setResultColor(button, result);
+  }
+
 }
