@@ -10,6 +10,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException; 
 import java.io.EOFException;
+import java.util.Date;
 
 import me.kukkii.janken.Hand;
 import me.kukkii.janken.Judge;
@@ -18,6 +19,8 @@ import me.kukkii.janken.Result;
 import me.kukkii.janken.User;
 import me.kukkii.janken.bot.BotManager;
 import me.kukkii.janken.bot.RandomBot;
+import me.kukkii.janken.log.LogManager;
+import me.kukkii.janken.log.LogItem;
 
 public class UserHandler implements Runnable{
   
@@ -38,6 +41,7 @@ public class UserHandler implements Runnable{
       long id = in.readLong();
       String name = NetUtils.receiveString(in);
       user = new User(id, name);
+      LogManager lm = new LogManager();      
 
       while(true){ 
         Player bot = BotManager.getManager().next();
@@ -51,6 +55,8 @@ public class UserHandler implements Runnable{
 
         System.out.print("user=" + name + "(" + id + ") bot=" + bot.getName());
         System.out.println(" result: " + result + " user: " + userHand + " bot: " + botHand);
+        LogItem li = new LogItem(new Date(), user, bot, userHand, botHand, result);
+        lm.write(li);
       }
     }
     catch(EOFException e){
