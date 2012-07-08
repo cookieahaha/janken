@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -37,27 +38,38 @@ public class JankenGamePanel extends JPanel implements ActionListener {
   private UserScore score;
 
   public JankenGamePanel() {
-    setBackground(ColorManager.getManager().getDefaultColor());
+    Color defaultColor = ColorManager.getManager().getDefaultColor();
+    setBackground(defaultColor);
     setOpaque(true);
     setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     
+    JPanel panel = new JPanel();
+    panel.setBackground(defaultColor);
+    panel.setOpaque(true);
+    add(panel);
     yourNameLabel = new JLabel();
     Font font = yourNameLabel.getFont();
     font = new Font(font.getFamily(), Font.BOLD, 20);
     yourNameLabel.setFont(font);
-    yourNameLabel.setBackground(ColorManager.getManager().getDefaultColor());
+    // yourNameLabel.setBackground(defaultColor);
+    yourNameLabel.setBackground(new Color(222, 222, 222));
     yourNameLabel.setOpaque(true);
-    add(yourNameLabel);
+    panel.add(yourNameLabel);
 
     yourJankenPanel = new JankenPanel(this);
     yourJankenPanel.clearColors();
     add(yourJankenPanel);
 
+    panel = new JPanel();
+    panel.setBackground(defaultColor);
+    panel.setOpaque(true);
+    add(panel);
     botNameLabel = new JLabel();
     botNameLabel.setFont(font);
-    botNameLabel.setBackground(ColorManager.getManager().getDefaultColor());
+    // botNameLabel.setBackground(defaultColor);
+    botNameLabel.setBackground(new Color(222, 222, 222));
     botNameLabel.setOpaque(true);
-    add(botNameLabel);
+    panel.add(botNameLabel);
 
     botJankenPanel = new JankenPanel(null);
     botJankenPanel.clearColors();
@@ -89,13 +101,25 @@ public class JankenGamePanel extends JPanel implements ActionListener {
   }
 
   private void updateScore() {
-    int[] scores = score.getScore((String)null);
-    yourNameLabel.setText(yourName + "   " + scores[0] + " - " + scores[1] + " - " + scores[2]);
+    updateScoreLabel(yourNameLabel, null);
   }
 
   private void updateBotScore() {
-    int[] scores = score.getScore(botName);
-    botNameLabel.setText(botName + "   " + scores[0] + " - " + scores[1] + " - " + scores[2]);
+    updateScoreLabel(botNameLabel, botName);
+  }
+
+  private void updateScoreLabel(JLabel label, String name) {
+    int[] scores = score.getScore(name);
+    if (name == null) {
+      name = yourName;
+    }
+    float rate = (float)(scores[0]);
+    if (rate > 0.0f) {
+      rate /= (scores[0] + scores[1]);
+    }
+    String r = String.format("%.3f", rate);
+    label.setText(name + "   " + scores[0] + " - " + scores[1] + " - " + scores[2] + "  " + r);
+    label.setHorizontalAlignment(SwingConstants.TRAILING);
   }
 
   public void actionPerformed(ActionEvent ae) {
