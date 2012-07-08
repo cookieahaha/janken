@@ -20,6 +20,7 @@ import javax.swing.plaf.synth.SynthLookAndFeel;
 
 import me.kukkii.janken.Hand;
 import me.kukkii.janken.Result;
+import me.kukkii.janken.log.UserScore;
 import me.kukkii.janken.net.JankenClient;
 
 public class JankenGamePanel extends JPanel implements ActionListener {
@@ -31,6 +32,9 @@ public class JankenGamePanel extends JPanel implements ActionListener {
 
   private JankenClient client;
   private int mode;
+  private String yourName;
+  private String botName;
+  private UserScore score;
 
   public JankenGamePanel() {
     setBackground(ColorManager.getManager().getDefaultColor());
@@ -61,24 +65,37 @@ public class JankenGamePanel extends JPanel implements ActionListener {
 
     try {
       client = new JankenClient();
-      String yourName = client.getUser().getName();
+      yourName = client.getUser().getName();
       yourNameLabel.setText(yourName);
 
     } catch (IOException e) { }
 
+    score = new UserScore();
+    updateScore();
     prepareGame();
   }
 
   public void prepareGame() {
     try {
-      String botName = client.receiveBotName();
-      botNameLabel.setText(botName);
+      botName = client.receiveBotName();
+      // botNameLabel.setText(botName);
+      updateBotScore();
     } catch (IOException e) { }
 
     yourJankenPanel.clearColors();
     botJankenPanel.clearColors();
 
     mode = 0;
+  }
+
+  private void updateScore() {
+    int[] scores = score.getScore((String)null);
+    yourNameLabel.setText(yourName + "   " + scores[0] + " - " + scores[1] + " - " + scores[2]);
+  }
+
+  private void updateBotScore() {
+    int[] scores = score.getScore(botName);
+    botNameLabel.setText(botName + "   " + scores[0] + " - " + scores[1] + " - " + scores[2]);
   }
 
   public void actionPerformed(ActionEvent ae) {
@@ -99,6 +116,10 @@ public class JankenGamePanel extends JPanel implements ActionListener {
     } catch (IOException e) { }
 
     System.err.println("you=" + yourHand + " bot=" + botHand + " result=" + result);
+
+    score.addScore(botName, result);
+    updateScore();
+    updateBotScore();
 
     yourJankenPanel.setResultColor(source, result);
     botJankenPanel.setResultColor(botHand, getBotResult(result));

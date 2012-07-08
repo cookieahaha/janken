@@ -11,34 +11,50 @@ import me.kukkii.janken.Result;
 
 public class UserScore implements Serializable {
 
-  private Map<Player, int[]> scoreMap;
+  // private Map<Player, int[]> scoreMap;
+  private Map<String, int[]> scoreMap;
 
   public UserScore() {
-    scoreMap = new HashMap<Player, int[]>();
+    // scoreMap = new HashMap<Player, int[]>();
+    scoreMap = new HashMap<String, int[]>();
   }
 
   public int[] getScore(Player player) {
-    return scoreMap.get(player);
+    return getScore(player.getName());
+  }
+
+  public int[] getScore(String name) {
+    int[] scores = scoreMap.get(name);
+    return (scores == null) ? (new int[3]) : scores;
   }
 
   public void setScore(Player player, int[] scores) {
-    scoreMap.put(player, scores);
+    setScore(player.getName(), scores);
+  }
+
+  public void setScore(String name, int[] scores) {
+    scoreMap.put(name, scores);
   }
 
   public void addScore(Player player, Result result) {
-    int[] scores = getScore(player);
+    addScore(player.getName(), result);
+  }
+
+  public void addScore(String name, Result result) {
+    int[] scores = getScore(name);
     if (scores == null) {
       scores = new int[3];
-      setScore(player, scores);
+      // setScore(name, scores);
     }
     addScore(scores, result);
 
-    scores = getScore(null);
+    scores = getScore((String)null);
     if (scores == null) {
       scores = new int[3];
-      setScore(null, scores);
+      setScore((String)null, scores);
     }
     addScore(scores, result);
+    setScore(name, scores);
   }
 
   private void addScore(int[] scores, Result result) {
