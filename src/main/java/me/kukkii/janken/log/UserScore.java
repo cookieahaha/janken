@@ -47,14 +47,15 @@ public class UserScore implements Serializable {
       // setScore(name, scores);
     }
     addScore(scores, result);
+    setScore(name, scores);
 
     scores = getScore((String)null);
     if (scores == null) {
       scores = new int[3];
-      setScore((String)null, scores);
+      // setScore((String)null, scores);
     }
     addScore(scores, result);
-    setScore(name, scores);
+    setScore((String)null, scores);
   }
 
   private void addScore(int[] scores, Result result) {

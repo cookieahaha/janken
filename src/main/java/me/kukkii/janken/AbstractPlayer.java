@@ -42,4 +42,18 @@ abstract public class AbstractPlayer implements Player {
     return Hand.get( hand(other.value()) );
   }
 
+  public boolean equals(Object other) {
+    if (! (other instanceof Player)) {
+      return false;
+    }
+    Player that = (Player) other;
+    // return (id == that.getId());
+    return name.equals(that.getName());
+  }
+
+  public int hashCode() {
+    // return new Long(id).hashCode();
+    return name.hashCode();
+  }
+
 }

@@ -9,10 +9,12 @@ abstract public class AbstractBot extends AbstractPlayer {
 
   public AbstractBot() {
     super();
+    id *= (-1);
   }
 
   public AbstractBot(long id, String name) {
     super(id, name);
+    id *= (-1);
   }
 
   abstract public int hand() ;
