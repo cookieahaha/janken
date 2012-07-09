@@ -19,7 +19,7 @@ public class LogManager {
 
   public void write(LogItem item) throws Exception {
     Statement statement=connection.createStatement();
-    statement.execute("INSERT INTO logtable(timestamp, user,bot,userHand,botHand,result) values (" + item.getTimestamp() + "," + item.getUser().getName() + "," + item.getBot().getName() + "," + item.getUserHand().value() + "," + item.getBotHand().value() + "," + item.getResult().value() + ");");
+    statement.execute("INSERT INTO logtable(timestamp, user,bot,userHand,botHand,result) values ('" + item.getTimestamp() + "','" + item.getUser().getName() + "','" + item.getBot().getName() + "'," + item.getUserHand().value() + "," + item.getBotHand().value() + "," + item.getResult().value() + ");");
   }
 
 }

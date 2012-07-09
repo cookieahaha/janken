@@ -4,6 +4,7 @@ package me.kukkii.janken.log;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.sql.Timestamp;
 
 import me.kukkii.janken.Hand;
 import me.kukkii.janken.Player;
@@ -11,14 +12,14 @@ import me.kukkii.janken.Result;
 
 public class LogItem implements Serializable {
 
-  private Date timestamp;
+  private Timestamp timestamp;
   private Player user;
   private Player bot;
   private Hand userHand;
   private Hand botHand;
   private Result result;
 
-  public LogItem(Date timestamp, Player user, Player bot, Hand userHand, Hand botHand, Result result) {
+  public LogItem(Timestamp timestamp, Player user, Player bot, Hand userHand, Hand botHand, Result result) {
     this.timestamp = timestamp;
     this.user = user;
     this.bot = bot;

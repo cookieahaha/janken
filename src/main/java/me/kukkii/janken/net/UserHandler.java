@@ -10,7 +10,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException; 
 import java.io.EOFException;
-import java.util.Date;
+import java.sql.Timestamp;
 
 import me.kukkii.janken.Hand;
 import me.kukkii.janken.Judge;
@@ -55,7 +55,7 @@ public class UserHandler implements Runnable{
 
         System.out.print("user=" + name + "(" + id + ") bot=" + bot.getName());
         System.out.println(" result: " + result + " user: " + userHand + " bot: " + botHand);
-        LogItem li = new LogItem(new Date(), user, bot, userHand, botHand, result);
+        LogItem li = new LogItem(new Timestamp(System.currentTimeMillis()), user, bot, userHand, botHand, result);
         lm.write(li);
       }
     }
