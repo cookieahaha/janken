@@ -2,6 +2,8 @@
 
 package me.kukkii.janken;
 
+import java.awt.Image;
+
 import me.kukkii.janken.Hand;
 import me.kukkii.janken.Player;
 
@@ -28,6 +30,10 @@ abstract public class AbstractPlayer implements Player {
 
   public String getName() {
     return name;
+  }
+
+  public Image getImage() {
+    return null;
   }
 
   abstract public int hand() ;

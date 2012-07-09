@@ -5,10 +5,6 @@ package me.kukkii.janken.gui;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -19,42 +15,30 @@ import me.kukkii.janken.net.JankenClient;
 
 public class JankenPanel extends JPanel {
 
-  private static final String guPng = "images/M-j_gu02.png";
-  private static final String chPng = "images/M-j_ch02.png";
-  private static final String paPng = "images/M-j_pa02.png";
-
   private JButton guButton = null;
   private JButton chButton = null;
   private JButton paButton = null;
 
   public JankenPanel(ActionListener listener) {
-    BufferedImage guImage = null;
-    BufferedImage chImage = null;
-    BufferedImage paImage = null;
-    try {
-      guImage = ImageIO.read(new File(guPng));
-      chImage = ImageIO.read(new File(chPng));
-      paImage = ImageIO.read(new File(paPng));
-    } catch (IOException e) { }
-
     setBackground(ColorManager.getManager().getDefaultColor());
     setOpaque(true);
 
     setLayout(new FlowLayout());
 
-    guButton = new JButton(new ImageIcon(guImage));
+    ImageManager imageManager = ImageManager.getManager();
+    guButton = new JButton( new ImageIcon(imageManager.getHandImage(Hand.ROCK)) );
     if (listener != null) {
       guButton.addActionListener(listener);;
     }
     guButton.setOpaque(true);
     add(guButton);
-    chButton = new JButton(new ImageIcon(chImage));
+    chButton = new JButton( new ImageIcon(imageManager.getHandImage(Hand.SCISSOR)) );
     if (listener != null) {
       chButton.addActionListener(listener);;
     }
     chButton.setOpaque(true);
     add(chButton);
-    paButton = new JButton(new ImageIcon(paImage));
+    paButton = new JButton( new ImageIcon(imageManager.getHandImage(Hand.PAPER)) );
     if (listener != null) {
       paButton.addActionListener(listener);;
     }

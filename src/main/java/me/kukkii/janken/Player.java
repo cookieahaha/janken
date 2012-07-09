@@ -2,11 +2,15 @@
 
 package me.kukkii.janken;
 
+import java.awt.Image;
+
 public interface Player{
 
   public long getId();
 
   public String getName();
+
+  public Image getImage();
 
   public int hand();
 

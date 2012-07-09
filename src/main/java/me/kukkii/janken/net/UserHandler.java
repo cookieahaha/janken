@@ -23,14 +23,25 @@ import me.kukkii.janken.log.LogManager;
 import me.kukkii.janken.log.LogItem;
 
 public class UserHandler implements Runnable{
+
+  private static final boolean dbLog = false;
   
   private Socket sock;
   private Judge judge;
   private User user;
+  LogManager lm = null;
 
   public UserHandler(Socket sock){
     this.sock = sock;
     judge = new Judge();
+    if (dbLog) {
+      try {
+        lm = new LogManager();      
+      }
+      catch (Exception e) {
+        lm = null;
+      }
+    }
   }
 
   public void run(){
@@ -41,7 +52,6 @@ public class UserHandler implements Runnable{
       long id = in.readLong();
       String name = NetUtils.receiveString(in);
       user = new User(id, name);
-      LogManager lm = new LogManager();      
 
       while(true){ 
         Player bot = BotManager.getManager().next();
@@ -55,8 +65,10 @@ public class UserHandler implements Runnable{
 
         System.out.print("user=" + name + "(" + id + ") bot=" + bot.getName());
         System.out.println(" result: " + result + " user: " + userHand + " bot: " + botHand);
-        LogItem li = new LogItem(new Timestamp(System.currentTimeMillis()), user, bot, userHand, botHand, result);
-        lm.write(li);
+        if (lm != null) {
+          LogItem li = new LogItem(new Timestamp(System.currentTimeMillis()), user, bot, userHand, botHand, result);
+          lm.write(li);
+        }
       }
     }
     catch(EOFException e){
