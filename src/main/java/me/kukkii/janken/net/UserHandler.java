@@ -29,19 +29,10 @@ public class UserHandler implements Runnable{
   private Socket sock;
   private Judge judge;
   private User user;
-  LogManager lm = null;
 
   public UserHandler(Socket sock){
     this.sock = sock;
     judge = new Judge();
-    if (dbLog) {
-      try {
-        lm = new LogManager();      
-      }
-      catch (Exception e) {
-        lm = null;
-      }
-    }
   }
 
   public void run(){
@@ -65,9 +56,9 @@ public class UserHandler implements Runnable{
 
         System.out.print("user=" + name + "(" + id + ") bot=" + bot.getName());
         System.out.println(" result: " + result + " user: " + userHand + " bot: " + botHand);
-        if (lm != null) {
-          LogItem li = new LogItem(new Timestamp(System.currentTimeMillis()), user, bot, userHand, botHand, result);
-          lm.write(li);
+        if (dbLog) {
+          LogItem logItem = new LogItem(new Timestamp(System.currentTimeMillis()), user, bot, userHand, botHand, result);
+          LogManager.getManager().write(logItem);
         }
       }
     }

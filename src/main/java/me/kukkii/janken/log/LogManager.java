@@ -7,20 +7,56 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class LogManager {
-  
-  private PreparedStatement ps;
-  private Connection connection;
 
-  public LogManager() throws Exception {
-    Class.forName("com.mysql.jdbc.Driver");
-    connection=DriverManager.getConnection("jdbc:mysql://localhost/janken","root","");  
-    ps = connection.prepareStatement("INSERT INTO logtable(timestamp, user,bot,userHand,botHand,result) values (?,?,?,?,?,?)"); 
+  private static final String JDBCURL    = "jdbc:mysql://localhost/janken";
+  private static final String JDBCUSER   = "root";
+  private static final String JDBCPASSWD = "";
+  
+  // singleton
+  private static LogManager manager = new LogManager();
+
+  public static LogManager getManager() {
+    return manager;
+  }
+
+  //
+
+  private Connection connection;
+  private PreparedStatement ps;
+
+  private LogManager() {
+    try {
+      Class.forName("com.mysql.jdbc.Driver");
+    }
+    catch (ClassNotFoundException e) {
+      e.printStackTrace();
+      ps = null;
+    }
+    try {
+      connection=DriverManager.getConnection(JDBCURL, JDBCUSER, JDBCPASSWD);
+      ps = connection.prepareStatement("INSERT INTO logtable(timestamp, user,bot,userHand,botHand,result) VALUES (?,?,?,?,?,?)");
+    }
+    catch (SQLException e) {
+      e.printStackTrace();
+      ps = null;
+    }
   }		
 
+  public void close() throws SQLException {
+    if (ps == null) {
+      return;
+    }
+    ps.close();
+    connection.close();
+  }
 
-  public void write(LogItem item) throws Exception {
+  public void write(LogItem item) throws SQLException {
+    if (ps == null) {
+      return;
+    }
     ps.setTimestamp(1,item.getTimestamp());
     ps.setString(2,item.getUser().getName());
     ps.setString(3,item.getBot().getName());
@@ -29,6 +65,5 @@ public class LogManager {
     ps.setInt(6,item.getResult().value());
     ps.execute();
   }
-
 
 }
