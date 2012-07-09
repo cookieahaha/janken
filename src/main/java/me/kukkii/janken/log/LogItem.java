@@ -28,7 +28,7 @@ public class LogItem implements Serializable {
     this.result = result;
   }
 
-  public Date getTimestamp() {
+  public Timestamp getTimestamp() {
     return timestamp;
   }
 
