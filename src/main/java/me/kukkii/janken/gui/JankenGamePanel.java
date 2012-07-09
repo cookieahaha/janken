@@ -2,6 +2,7 @@
 
 package me.kukkii.janken.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -9,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,6 +23,7 @@ import javax.swing.plaf.synth.SynthLookAndFeel;
 
 import me.kukkii.janken.Hand;
 import me.kukkii.janken.Result;
+import me.kukkii.janken.bot.BotManager;
 import me.kukkii.janken.log.UserScore;
 import me.kukkii.janken.net.JankenClient;
 
@@ -30,6 +33,8 @@ public class JankenGamePanel extends JPanel implements ActionListener {
   private JLabel botNameLabel;
   private JankenPanel yourJankenPanel;
   private JankenPanel botJankenPanel;
+  private JPanel botImagePanel;
+  private JButton botImageButton;
 
   private JankenClient client;
   private int mode;
@@ -39,14 +44,21 @@ public class JankenGamePanel extends JPanel implements ActionListener {
 
   public JankenGamePanel() {
     Color defaultColor = ColorManager.getManager().getDefaultColor();
+
     setBackground(defaultColor);
     setOpaque(true);
-    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+  
+    JPanel panel0 = new JPanel();
+    add(panel0);
+    panel0.setBackground(defaultColor);
+    panel0.setOpaque(true);
+    panel0.setLayout(new BoxLayout(panel0, BoxLayout.Y_AXIS));
     
     JPanel panel = new JPanel();
     panel.setBackground(defaultColor);
     panel.setOpaque(true);
-    add(panel);
+    panel0.add(panel);
     yourNameLabel = new JLabel();
     Font font = yourNameLabel.getFont();
     font = new Font(font.getFamily(), Font.BOLD, 20);
@@ -58,12 +70,12 @@ public class JankenGamePanel extends JPanel implements ActionListener {
 
     yourJankenPanel = new JankenPanel(this);
     yourJankenPanel.clearColors();
-    add(yourJankenPanel);
+    panel0.add(yourJankenPanel);
 
     panel = new JPanel();
     panel.setBackground(defaultColor);
     panel.setOpaque(true);
-    add(panel);
+    panel0.add(panel);
     botNameLabel = new JLabel();
     botNameLabel.setFont(font);
     // botNameLabel.setBackground(defaultColor);
@@ -73,7 +85,13 @@ public class JankenGamePanel extends JPanel implements ActionListener {
 
     botJankenPanel = new JankenPanel(null);
     botJankenPanel.clearColors();
-    add(botJankenPanel);
+    panel0.add(botJankenPanel);
+
+    botImagePanel = new JPanel();
+    add(botImagePanel);
+    botImagePanel.setLayout(new BorderLayout());
+    botImageButton = new JButton();
+    botImagePanel.add(botImageButton, BorderLayout.CENTER);
 
     try {
       client = new JankenClient();
@@ -96,6 +114,8 @@ public class JankenGamePanel extends JPanel implements ActionListener {
 
     yourJankenPanel.clearColors();
     botJankenPanel.clearColors();
+
+    botImageButton.setIcon(new ImageIcon( ImageManager.getManager().getPlayerImage( BotManager.getManager().getBot(botName) )));
 
     mode = 0;
   }
