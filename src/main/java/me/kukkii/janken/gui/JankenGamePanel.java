@@ -23,11 +23,15 @@ import javax.swing.plaf.synth.SynthLookAndFeel;
 
 import me.kukkii.janken.Hand;
 import me.kukkii.janken.Result;
+import me.kukkii.janken.User;
 import me.kukkii.janken.bot.BotManager;
 import me.kukkii.janken.log.UserScore;
 import me.kukkii.janken.net.JankenClient;
+import me.kukkii.janken.net.LocalUserHandler;
 
 public class JankenGamePanel extends JPanel implements ActionListener {
+
+  private static final boolean net = false;
 
   private JLabel yourNameLabel;
   private JLabel botNameLabel;
@@ -37,6 +41,7 @@ public class JankenGamePanel extends JPanel implements ActionListener {
   private JButton botImageButton;
 
   private JankenClient client;
+  private LocalUserHandler handler;
   private int mode;
   private String yourName;
   private String botName;
@@ -94,8 +99,16 @@ public class JankenGamePanel extends JPanel implements ActionListener {
     botImagePanel.add(botImageButton, BorderLayout.CENTER);
 
     try {
-      client = new JankenClient();
-      yourName = client.getUser().getName();
+      if (net) {
+        client = new JankenClient();
+        yourName = client.getUser().getName();
+      }
+      else {
+        handler = new LocalUserHandler();
+        User user = new User();
+        yourName = user.getName();
+        handler.init(user);
+      }
       yourNameLabel.setText(yourName);
 
     } catch (IOException e) { }
@@ -107,8 +120,12 @@ public class JankenGamePanel extends JPanel implements ActionListener {
 
   public void prepareGame() {
     try {
-      botName = client.receiveBotName();
-      // botNameLabel.setText(botName);
+      if (net) {
+        botName = client.receiveBotName();
+      }
+      else {
+        botName = handler.nextBot().getName();
+      }
       updateBotScore();
     } catch (IOException e) { }
 
@@ -154,9 +171,16 @@ public class JankenGamePanel extends JPanel implements ActionListener {
     Hand botHand = null;
     Result result = null;
     try {
-      client.sendHand(yourHand);
-      botHand = client.receiveBotHand();
-      result = client.receiveResult();
+      if (net) {
+        client.sendHand(yourHand);
+        botHand = client.receiveBotHand();
+        result = client.receiveResult();
+      }
+      else {
+        handler.hand(yourHand);
+        botHand = handler.getBotHand();
+        result = handler.getResult();
+      }
     } catch (IOException e) { }
 
     System.err.println("you=" + yourHand + " bot=" + botHand + " result=" + result);
